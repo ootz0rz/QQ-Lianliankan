@@ -1,17 +1,11 @@
 /** CSS styles for each sphere color available */
-var sphere_colors = {
-    '0' : 'sphere1',
-    '1' : 'sphere2',
-    '2' : 'sphere3',
-    '3' : 'sphere4',
-    '4' : 'sphere5'
-};
-
-/** CSS styles for each square color available */
-var square_colors = {
-    '0' : 'square1',
-    '1' : 'square2',
-    '2' : 'square3',
-    '3' : 'square4',
-    '4' : 'square5'
+var num_block_types = 5;
+var block_types = {
+    '-1' : 'block0',
+    
+    '0' : 'block1',
+    '1' : 'block2',
+    '2' : 'block3',
+    '3' : 'block4',
+    '4' : 'block5'
 };

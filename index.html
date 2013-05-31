@@ -13,6 +13,9 @@
 		<script type="text/javascript" src="js/functions.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>
 		<script type="text/javascript" src="js/bokeh.js"></script>
+		<script type="text/javascript" src="js/scorebox.js"></script>
+		<script type="text/javascript" src="js/block.js"></script>
+		<script type="text/javascript" src="js/gameboard.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -27,6 +30,7 @@
 
 		<script type="text/javascript">
 			bokeh = new BokehBG('#bokeh_container');
+			game = new GameBoard('#gameplatform', bokeh, 10, 10);
 		</script>
 	</body>
 </html>
