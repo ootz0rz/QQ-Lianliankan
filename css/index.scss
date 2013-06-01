@@ -200,6 +200,15 @@ a {
 	}
 }
 
+#credits {
+	position: relative;
+	width: 100%;
+	text-align: center;
+	top: 3em;
+	font-size: .7em;
+	z-index: 1000;
+}
+
 $platformwidth: $radius * $cols + ($cols * $padding);
 $platformheight: $radius * $rows + ($rows * $padding);
 
@@ -241,6 +250,22 @@ $platformheight: $radius * $rows + ($rows * $padding);
 		}
 
 		// define individual block types...
+		.block1 { content: url('../img/icons/digital_camera.png'); }
+		.block2 { content: url('../img/icons/iphone.png'); }
+		.block3 { content: url('../img/icons/rainy.png'); }
+		.block4 { content: url('../img/icons/sunny.png'); }
+		.block5 { content: url('../img/icons/mouse.png'); }
+		.block6 { content: url('../img/icons/alarm.png'); }
+		.block7 { content: url('../img/icons/flag.png'); }
+		.block8 { content: url('../img/icons/phone_ringing.png'); }
+		.block9 { content: url('../img/icons/digital_camera.png'); }
+		.block10 { content: url('../img/icons/envelope_open.png'); }
+		.block11 { content: url('../img/icons/movie.png'); }
+		.block12 { content: url('../img/icons/phone_book.png'); }
+		.block13 { content: url('../img/icons/news.png'); }
+		.block14 { content: url('../img/icons/flag.png'); }
+		.block15 { content: url('../img/icons/eject.png'); }
+		.block16 { content: url('../img/icons/calculator.png'); }
 
 		// define the row and column positions
 		// columns
