@@ -69,8 +69,14 @@ BokehBG.method('go', function () {
     // Math.sin(p1) (bottom left) p1=4.71238898038469
     // -> to ->
     // Math.sin(p2) (top right) p2=7.853981633974483
-    var p1 = 3 * Math.PI / 2;
-    var p2 = 5 * Math.PI / 2;
+    // var p1 = 3 * Math.PI / 2;
+    // var p2 = 5 * Math.PI / 2;
+
+    // Math.sin(p1) (top left)
+    // -> to ->
+    // Math.sin(p2) (bottom right)
+    var p1 = Math.PI / 2;
+    var p2 = 3 * Math.PI / 2;
     
     var res = this.res;
     

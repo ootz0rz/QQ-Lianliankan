@@ -225,7 +225,7 @@ $platformheight: $radius * $rows + ($rows * $padding);
 	border-color: $color_game_border;
 
 	//padding: $padding * 2;
-	padding-bottom: $padding + $height_scoreboard;
+	padding-bottom: $height_scoreboard;
 	margin: 0px auto;
 
 	position: relative;
@@ -245,6 +245,7 @@ $platformheight: $radius * $rows + ($rows * $padding);
 
 			outline-style: solid;
 			outline-width: 1px;
+			outline-color: $color_game_border;
 
 			z-index: 200;
 		}
