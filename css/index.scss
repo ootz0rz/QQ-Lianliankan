@@ -244,6 +244,11 @@ $platformheight: $radius * $rows + ($rows * $padding);
 	top: 10px;
 
 	#blockcontainer {
+		.selected {
+			@include btnGradient(darken($s3, 15));
+			@include transition(all 1s linear);
+		}
+
 		.block {
 			cursor: pointer;
 

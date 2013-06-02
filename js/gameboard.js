@@ -17,6 +17,9 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	// default sphere/box size
 	this.radius = '40px';
 
+	// currently selected block as Block() if any
+	this.selected = null;
+
 	// init the board
 	// --------------------------------------
 
@@ -36,6 +39,41 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	// populate
 	this.populate(this.start_cols, this.start_rows, num_block_types);
 }
+
+/**
+ * Select the block at the given x/y if possible
+ */ 
+GameBoard.method('select_block', function(x, y) {
+	var curblock = this.blocks[x][y];
+
+	// ignore empty blocks
+	if (curblock.type == -1) return;
+
+	// check if a block is already selected
+	if ( this.selected == null ) { // nothing selected
+		curblock.select();
+		this.selected = curblock;
+	} else { // something selected
+		// if it's the same one, then deselect and return
+		if ( this.selected == curblock ) {
+			curblock.deselect();
+			this.selected = null;
+			return;
+		}
+
+		// otherwise, check to see if type's match before we do anything
+		// if they do, then we'll see if there is a valid path between the
+		// two and remove them from the board
+		if ( this.selected.type == curblock.type ) {
+
+		} else {
+			// otherwise, we just simply select the new block
+			this.selected.deselect();
+			curblock.select();
+			this.selected = curblock;
+		}
+	}
+});
 
 /**
  * Pseudo-randomly populate the game board with specified # cols/rows.
