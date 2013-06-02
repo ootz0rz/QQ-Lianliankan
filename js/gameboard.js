@@ -30,11 +30,6 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	// Block().type -> [[x,y], [x,y], ...]
 	this.blocks_by_type = {};
 
-	// given a block() as key, return all other valid blocks that can be 
-	// reached
-	// Block() -> [Block(), Block(), ...]
-	this.valid_pairs = {};
-
 	// All the paths between any valid pair
 	// arr[Block().bID][Block().bID] -> [Block(), Block(), ..., Block()]
 	// Note that the starting element is of the first block and ending element 
@@ -60,6 +55,8 @@ function GameBoard(parentid, bokeh, rows, cols) {
  * board
  */
 GameBoard.method('find_paths', function() {
+	this.paths = {};
+
 	for (var typeid in this.blocks_by_type) {
 		var blocks = this.blocks_by_type[typeid];
 
@@ -75,6 +72,26 @@ GameBoard.method('find_paths', function() {
 	}
 
 	console.log(this.paths);
+});
+
+/**
+ * Remove the specified block from the gameboard and replace with a blank tile
+ */
+GameBoard.method('remove_block', function(block) {
+	// remove from board
+	block.deselect();
+	block.clear();
+
+	// update global arrays
+	var pos = this.blocks_by_type[block];
+	for (var index in pos) {
+		var curpos = pos[index];
+
+		if (curpos[0] == block.x && curpos[1] == block.y) {
+			delete pos[index];
+			break;
+		}
+	}
 });
 
 /**
@@ -110,6 +127,7 @@ var Gameboard__find_path = function(board, block) {
 		}
 	}
 
+	// check the give pos[x,y] is within game board bounds
 	var is_in_bounds = function(pos) {
 		return (
 				pos[0] >= 0 && pos[0] < board.cols && 
@@ -117,14 +135,7 @@ var Gameboard__find_path = function(board, block) {
 			);
 	};
 
-	var get_move = function(M) {
-		if (M == M_UP) return _up;
-		if (M == M_DOWN) return _down;
-		if (M == M_LEFT) return _left;
-		if (M == M_RIGHT) return _right;
-		if (M == M_NONE) return _none;
-	}
-
+	// the actual brute force path finding
 	var do_pathfinding = function(
 			node, 
 			last_move,
@@ -185,6 +196,7 @@ var Gameboard__find_path = function(board, block) {
 		return res;
 	};
 
+	// recurse do_pathfinding at the new_pos
 	var do_move = function(new_pos, _move, nodes_left, last_move, turns_left, cur_path) {
 		var top_block = board.blocks[new_pos[0]][new_pos[1]];
 		var top_nodes_left = nodes_left.slice(0);
@@ -234,12 +246,18 @@ GameBoard.method('select_block', function(x, y) {
 		// two and remove them from the board
 		if ( this.selected.type == curblock.type ) {
 			if (this.selected.bID in this.paths) {
-				console.log("Paths exist for selected");
+				console.log("Paths exist for pre-selected item...");
 
 				var paths = this.paths[this.selected.bID];
 
 				if ( curblock.bID in paths ) {
-					console.log("and a path between the two!", paths[curblock.bID]);
+					console.log("and a path between the two clicked!", paths[curblock.bID]);
+
+					this.remove_block(this.selected);
+					this.remove_block(curblock);
+					this.selected = null;
+
+					this.find_paths();
 				}
 			}
 		} else {

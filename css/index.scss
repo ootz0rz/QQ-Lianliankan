@@ -244,6 +244,11 @@ $platformheight: $radius * $rows + ($rows * $padding);
 	top: 10px;
 
 	#blockcontainer {
+		.pathway {
+			@include btnGradient(darken($s2, 15));
+			@include transition(all 0.2s linear);
+		}
+
 		.selected {
 			@include btnGradient(darken($s3, 15));
 			@include transition(all 1s linear);
@@ -294,12 +299,12 @@ $platformheight: $radius * $rows + ($rows * $padding);
 		.block6 { content: url('../img/icons/alarm.png'); }
 		.block7 { content: url('../img/icons/flag.png'); }
 		.block8 { content: url('../img/icons/phone_ringing.png'); }
-		.block9 { content: url('../img/icons/digital_camera.png'); }
+		.block9 { content: url('../img/icons/recycle_bin.png'); }
 		.block10 { content: url('../img/icons/envelope_open.png'); }
 		.block11 { content: url('../img/icons/movie.png'); }
 		.block12 { content: url('../img/icons/phone_book.png'); }
 		.block13 { content: url('../img/icons/news.png'); }
-		.block14 { content: url('../img/icons/flag.png'); }
+		.block14 { content: url('../img/icons/database.png'); }
 		.block15 { content: url('../img/icons/eject.png'); }
 		.block16 { content: url('../img/icons/calculator.png'); }
 
