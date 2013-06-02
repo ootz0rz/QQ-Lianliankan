@@ -12,9 +12,8 @@ function Block(parentnode, radius, x, y, type) {
 }
 
 var Block__onDivClick = function(e) {
-	console.log('click', e);
-
 	var $this = $(e.currentTarget).data('block');
+	console.log('click', e, 'pos', $this.x, $this.y);
 	if ($this.type != -1) {
 		console.log('not a blank tile');
 
@@ -23,14 +22,10 @@ var Block__onDivClick = function(e) {
 };
 
 Block.method('select', function () {
-	console.log("SELECT!");
-	
 	this.div.addClass('selected');
 });
 
 Block.method('deselect', function () {
-	console.log("DESELECT!");
-	
 	this.div.removeClass('selected');
 });
 
