@@ -36,9 +36,9 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	this.valid_pairs = {};
 
 	// All the paths between any valid pair
-	// arr[Block()][Block()] -> [[x,y], [x,y], [x,y], ...]
-	// Note that the starting [x,y] is of the first block and ending [x,y] is 
-	// of the second, inclusive
+	// arr[Block().bID][Block().bID] -> [Block(), Block(), ..., Block()]
+	// Note that the starting element is of the first block and ending element 
+	// is the second, inclusive
 	this.paths = {};
 
 	var blockcontainer = $("<div />");
@@ -51,7 +51,7 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	this.scorebox = new Scorebox(this.parentnode);
 
 	// populate
-	this.populate(this.start_cols, this.start_rows, 1);//num_block_types);
+	this.populate(this.start_cols, this.start_rows, num_block_types);
 	this.find_paths();
 }
 
@@ -63,16 +63,18 @@ GameBoard.method('find_paths', function() {
 	for (var typeid in this.blocks_by_type) {
 		var blocks = this.blocks_by_type[typeid];
 
-		if (blocks.length > 1) {
+		if (blocks.length > 1 && typeid != BLOCK_BLANK_TYPE_ID) {
 			for (var index in blocks) {
 				var pos = blocks[index];
 				var curblock = this.blocks[pos[0]][pos[1]];
 
 				var paths = Gameboard__find_path(this, curblock);
-				return;
+				$.extend(this.paths, paths);
 			}
 		}
 	}
+
+	console.log(this.paths);
 });
 
 /**
@@ -130,27 +132,30 @@ var Gameboard__find_path = function(board, block) {
 			nodes_left,
 			cur_path) 
 	{
+		// no movement left
 		if ( turns_left < 0 ) return [];
+
+		// encountered same block
 		if ( block.type == node.type && block !== node ) {
-			if ( !(block in valid_path) ) {
-				valid_path[block] = {};
+			if ( !(block.bID in valid_path) ) {
+				valid_path[block.bID] = {};
 			}
 
-			if ( !(node in valid_path[block]) ) {
-				valid_path[block][node] = cur_path;
-				console.log('added new path', cur_path);
+			if ( !(node.bID in valid_path[block.bID]) ) {
+				valid_path[block.bID][node.bID] = cur_path;
 			} else {
 				// only replace if shorter
-				var len = valid_path[block][node].length;
+				var len = valid_path[block.bID][node.bID].length;
 				if ( len > cur_path.length ) {
-					valid_path[block][node] = cur_path;
+					valid_path[block.bID][node.bID] = cur_path;
 				}
-
-				console.log('replaced old path', cur_path);
 			}
 
 			return cur_path;
 		}
+
+		// encounter non empty block of different type
+		if ( node.type != BLOCK_BLANK_TYPE_ID && block !== node ) return [];
 
 		var cur_pos = [node.x, node.y];
 
@@ -197,9 +202,9 @@ var Gameboard__find_path = function(board, block) {
 	}
 
 	var paths = do_pathfinding(block, M_NONE, 2, all_nodes, [block]);
-	console.log('do_pathfinding', paths);
+	//console.log('do_pathfinding', paths);
 
-	console.log("FINAL PATHS", valid_path);
+	//console.log("FINAL PATHS", valid_path);
 	return valid_path;
 };
 
@@ -210,7 +215,7 @@ GameBoard.method('select_block', function(x, y) {
 	var curblock = this.blocks[x][y];
 
 	// ignore empty blocks
-	if (curblock.type == -1) return;
+	if (curblock.type == BLOCK_BLANK_TYPE_ID) return;
 
 	// check if a block is already selected
 	if ( this.selected == null ) { // nothing selected
@@ -228,7 +233,15 @@ GameBoard.method('select_block', function(x, y) {
 		// if they do, then we'll see if there is a valid path between the
 		// two and remove them from the board
 		if ( this.selected.type == curblock.type ) {
+			if (this.selected.bID in this.paths) {
+				console.log("Paths exist for selected");
 
+				var paths = this.paths[this.selected.bID];
+
+				if ( curblock.bID in paths ) {
+					console.log("and a path between the two!", paths[curblock.bID]);
+				}
+			}
 		} else {
 			// otherwise, we just simply select the new block
 			this.selected.deselect();
@@ -266,7 +279,7 @@ GameBoard.method('populate', function (start_cols, start_rows, num_types) {
 			var xdelta = x - padding_x;
 			var ydelta = y - padding_y;
 
-			var curblocktype = -1;
+			var curblocktype = BLOCK_BLANK_TYPE_ID;
 			if (
 				xdelta >= 0 && xdelta < start_cols
 				&& 

@@ -1,9 +1,13 @@
+BLOCK_BLANK_TYPE_ID = -1;
+
 function Block(parentnode, radius, x, y, type) {
 	this.parentnode = parentnode;
 	this.radius = radius;
 	this.x = x;
 	this.y = y;
 	this.type = type;
+
+	this.bID = [x,y,type].join("|");
 
 	this.div = null;
 	this.o = null;
