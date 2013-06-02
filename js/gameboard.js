@@ -60,19 +60,29 @@ GameBoard.method('find_paths', function() {
 	for (var typeid in this.blocks_by_type) {
 		var blocks = this.blocks_by_type[typeid];
 
-		if (blocks.length > 1 && typeid != BLOCK_BLANK_TYPE_ID) {
+		if (blocks.length > 1) {
 			for (var index in blocks) {
 				var pos = blocks[index];
 				var curblock = this.blocks[pos[0]][pos[1]];
 
-				var paths = Gameboard__find_path(this, curblock);
-				$.extend(this.paths, paths);
+				if (curblock.type != BLOCK_BLANK_TYPE_ID) {
+					var paths = Gameboard__find_path(this, curblock);
+					$.extend(this.paths, paths);
+				}
 			}
 		}
 	}
 
 	console.log(this.paths);
+
+	// see how many paths we have, if we don't have any, we need to repopulate
+	// the board
+	if ( Object.keys(game.paths).length == 0 ) {
+
+	}
 });
+
+
 
 /**
  * Remove the specified block from the gameboard and replace with a blank tile
@@ -258,15 +268,23 @@ GameBoard.method('select_block', function(x, y) {
 					this.selected = null;
 
 					this.find_paths();
+					return;
 				}
 			}
-		} else {
-			// otherwise, we just simply select the new block
-			this.selected.deselect();
-			curblock.select();
-			this.selected = curblock;
-		}
+		} 
+		
+		// otherwise, we just simply select the new block
+		this.selected.deselect();
+		curblock.select();
+		this.selected = curblock;
 	}
+});
+
+/**
+ * Similar to populate(), but replaces only existing non empty tiles.
+ */
+GameBoard.method('repopulate', function() {
+
 });
 
 /**
@@ -311,6 +329,10 @@ GameBoard.method('populate', function (start_cols, start_rows, num_types) {
 		}
 	}
 
+	this.blocks_by_type = GameBoard__fix_block_pairings(this, types_used);
+});
+
+var GameBoard__fix_block_pairings = function(board, types_used) {
 	console.log('types used v1', types_used);
 
 	// pass 1:
@@ -343,13 +365,14 @@ GameBoard.method('populate', function (start_cols, start_rows, num_types) {
 			var x = val[0];
 			var y = val[1];
 
-			this.blocks[x][y] = new Block(this.blockcontainer, this.radius, x, y, key);
+			board.blocks[x][y] = new Block(board.blockcontainer, board.radius, x, y, key);
 		}
 	}
 
 	console.log('types used v2', types_used);
-	this.blocks_by_type = types_used;
-});
+
+	return types_used;
+};
 
 GameBoard.method('reset', function () {
 
