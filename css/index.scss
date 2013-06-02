@@ -6,6 +6,13 @@
 @import "index.localfonts";
 
 // functions ---------------------------------------
+@mixin transition($t) {
+	-webkit-transition: $t;
+	-moz-transition: $t;
+	-o-transition: $t;
+	-ms-transition: $t;
+	transition: $t;
+}
 @mixin sphere($color) {
 	$c1: lighten($color, 5);
 	$c2: $color;
@@ -128,6 +135,8 @@
 
 	@include makebutton(lighten($color_game_border, 15)); 
 
+	@include transition(all 0.2s linear);
+
 	&#btnScores {
 		position: absolute;
 		bottom: 0;
@@ -141,6 +150,8 @@
 			1px 0px 1px #000,
 			0px -1px 1px #000,
 			0px 1px 1px #000;
+
+		//@include transition(all 5s linear);
 	}
 }
 
@@ -234,20 +245,39 @@ $platformheight: $radius * $rows + ($rows * $padding);
 
 	#blockcontainer {
 		.block {
+			cursor: pointer;
+
 			width: $radius;
 			height: $radius;
 
 			display: inline-block;
 			position: absolute;
 
-			padding-right: 4px;
-			padding-bottom: 4px;
+			//padding-right: 4px;
+			//padding-bottom: 4px;
+			padding: 2px;
 
 			outline-style: solid;
 			outline-width: 1px;
 			outline-color: $color_game_border;
 
 			z-index: 200;
+
+			vertical-align: middle;
+			text-align: center;
+
+			@include transition(all 0.2s linear);
+
+			&:hover {
+				outline-color: #fff;
+				outline-width: 3px;
+
+				@include btnGradient(darken($s1, 15));
+
+				z-index: 205;
+
+				@include transition(all 0.2s linear);
+			}
 		}
 
 		// define individual block types...

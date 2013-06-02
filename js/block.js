@@ -20,7 +20,6 @@ Block.method('create', function () {
 	var div = $("<div />");
 	this.parentnode.append(div);
 
-	div.block = this;
 	div.addClass('block');
 	div.addClass('col' + this.x);
 	div.addClass('row' + this.y);
@@ -32,4 +31,7 @@ Block.method('create', function () {
 
 	this.div = div;
 	this.o = o;
+
+	div.data('block', this);
+	o.data('block', this);
 });

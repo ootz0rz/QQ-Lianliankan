@@ -1,3 +1,5 @@
+var game = null;
+
 /** CSS styles for each sphere color available */
 var num_block_types = 16;
 var block_types = {
