@@ -81,34 +81,26 @@ GameBoard.method('populate', function (start_cols, start_rows, num_types) {
 	console.log('types used v1', types_used);
 
 	// pass 1:
-	// compile list of odd numbered length keys, and those with just 1 key
-	var singles = [];
+	// compile list of odd numbered length keys
 	var odds = [];
 	for (var key in types_used) {
-		if (types_used[key].length == 1) {
-			singles.push(key);
-		} else if (types_used[key].length % 2 != 0) {
+		if (types_used[key].length % 2 != 0) {
 			odds.push(key);
 		}
 	}
 
-	console.log('singles', singles, 'odds', odds);
+	console.log('odds', odds);
 
-	// remove the singles, add to odds
-	for (var index in singles) {
-		var val = singles[index];
-		if (odds.length > 0) {
-			var loc = types_used[val][0];
-			var oddid = odds.pop();
+	// add one from the odds to another odd, remove both from list
+	while (odds.length > 0) {
+		var oddid_1 = odds.pop();
+		var oddid_2 = odds.pop();
 
-			console.log('move', val, loc, 'to', oddid);
-			
-			types_used[oddid].push(loc);
-			delete types_used[val];
-		}
+		var loc1 = types_used[oddid_1].pop();
+		types_used[oddid_2].push(loc1);
 	}
 
-	// TODO check for any odds left, and redistribute?
+	console.log('odds', odds);
 
 	// pass 2:
 	// finally create/display blocks
