@@ -30,7 +30,9 @@ function Scorebox(parentnode) {
 	newGame.attr('href', '#');
 	newGame.attr('id', 'btnNewGame');
 	newGame.html("New Game");
-	newGame.on('click', function() {game.start();});
+	newGame.on('click', function() {
+		game.start();
+	});
 
 	controls.append(newGame);
 	this.btnNewGame = newGame;
@@ -39,6 +41,10 @@ function Scorebox(parentnode) {
 	help.attr('href', '#');
 	help.attr('id', 'btnHelp');
 	help.html("Help!");
+	help.on('click', function(e) {
+		e.preventDefault();
+		game.help();
+	});
 
 	controls.append(help);
 	this.btnHelp = help;

@@ -25,19 +25,49 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	// bottom score/control box
 	this.scorebox = new Scorebox(this.parentnode);
 
-	//this.start();
+	// create help dialog
+	// --------------------------------------
+	var h = new Modal(
+		'OMG HELP MEEEE',
+		"The game is fairly simple. It's basically matching tiles but with a "
+		+ "small twist. There must be a clear, unbroken path between each of "
+		+ "the tiles. This means they can be beside each other, or a bit "
+		+ "further away too. But the path can only take 2 turns at most. The "
+		+ "following are some examples of valid moves. Note that there is "
+		+ "no path length limit."
+	);
+	h.addbutton('Close');
+	this.helpbox = h;
+
+	// show welcome message
+	// --------------------------------------
 	var m = new Modal(
 		'Welcome!', 
 		'To begin playing, close this window and click '
-		+ '<strong>NEW GAME</strong>. Instructions are available under '
+		+ '<strong>NEW GAME</strong> or the <strong>START</strong> button '
+		+ 'below. Instructions are available under '
 		+ '<strong>HELP</strong>. Enjoy!'
 	);
-
+	var mstart = m.addbutton("Start");
 	var mclose = m.addbutton("Close");
+
+	mstart.on('click', function() {
+		game.start();
+	});
 
 	m.show();
 }
 
+/**
+ * Display help dialog
+ */ 
+GameBoard.method('help', function() {
+	this.helpbox.show();
+});
+
+/**
+ * Start the game
+ */ 
 GameBoard.method('start', function() {
 	this.reset();
 	$(".block").remove();
@@ -51,6 +81,9 @@ GameBoard.method('start', function() {
 	this.find_paths();
 });
 
+/**
+ * Refresh board and move on to next round
+ */ 
 GameBoard.method('next_round', function() {
 	this.reset(false);
 	$(".block").remove();
