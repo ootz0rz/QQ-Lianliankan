@@ -273,6 +273,11 @@ GameBoard.method('select_block', function(x, y) {
 				if ( curblock.bID in paths ) {
 					console.log("and a path between the two clicked!", paths[curblock.bID]);
 
+					for (var index in paths[curblock.bID]) {
+						var b = paths[curblock.bID][index];
+						b.highlight();
+					}
+
 					this.remove_block(this.selected);
 					this.remove_block(curblock);
 					this.selected = null;

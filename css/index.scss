@@ -93,11 +93,25 @@
 	$tbot_color2: saturate(darken($tbot_color1, 10), 10);
 	$tbot_color3: saturate(darken($tbot_color2, 10), 10);
 	$tbot_color4: saturate(darken($tbot_color3, 10), 10);
-	
-    background-color: $tbot_color1;
-    background-image: -moz-linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%);
-    background-image: -webkit-linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%);
-    background-image: linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%);
+
+	background-color: $tbot_color1;
+	background-image: -moz-linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%);
+	background-image: -webkit-linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%);
+	background-image: linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%);
+}
+
+@mixin btnGradientImportant($color) {
+	$tbot_color1: $color;
+
+	// main colors
+	$tbot_color2: saturate(darken($tbot_color1, 10), 10);
+	$tbot_color3: saturate(darken($tbot_color2, 10), 10);
+	$tbot_color4: saturate(darken($tbot_color3, 10), 10);
+
+	background-color: $tbot_color1 !important;
+	background-image: -moz-linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%) !important;
+	background-image: -webkit-linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%) !important;
+	background-image: linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%) !important;
 }
 
 @mixin makebutton($color, $shadow: rgba(0, 0, 0, 0.8)) {
@@ -245,7 +259,7 @@ $platformheight: $radius * $rows + ($rows * $padding);
 
 	#blockcontainer {
 		.pathway {
-			@include btnGradient(darken($s2, 15));
+			@include btnGradientImportant(darken($s2, 15));
 			@include transition(all 0.2s linear);
 		}
 

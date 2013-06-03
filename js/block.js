@@ -57,6 +57,19 @@ Block.method('deselect', function () {
 	this.div.removeClass('selected');
 });
 
+Block.method('highlight', function () {
+	this.div.addClass('pathway');
+
+	var Block__highlight__removeClass = function(block) {
+		block.div.removeClass('pathway');
+	}
+
+	var $this = this;
+	this.timer = window.setTimeout(function() {
+		Block__highlight__removeClass($this);
+	}, 200);
+});
+
 /**
 * Create the block at its current x/y/type and return the created div
 */
