@@ -90,7 +90,7 @@ Block.method('hint', function () {
 });
 
 /**
-* Create the block at its current x/y/type and return the created div
+* Create the block at its current x/y/type
 */
 Block.method('create', function () {
 	// positioning div
