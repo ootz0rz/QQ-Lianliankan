@@ -119,6 +119,8 @@ GameBoard.method('start', function() {
 	this.populate(this.start_cols, this.start_rows, num_block_types, true);
 	this.find_paths();
 	this.scorebox.begintimer();
+
+	bokeh.reset();
 });
 
 /**
@@ -140,6 +142,8 @@ GameBoard.method('next_round', function() {
 	this.scorebox.begintimer();
 	this.scorebox.extendtime(this.start_cols < this.cols ? this.start_rows * 2 : 0);
 	this.scorebox._timeHelpsLeft = this.scorebox._timeHelpsLeft + 1;
+
+	bokeh.reset();
 });
 
 /**
@@ -185,7 +189,7 @@ GameBoard.method('do_win', function() {
  */ 
 GameBoard.method('lose', function() {
 	this.scorebox.stoptimer();
-	
+
 	if ( this.losebox != null ) {
 		// remove old box first
 		this.losebox.div.remove();
