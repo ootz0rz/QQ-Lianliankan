@@ -130,6 +130,7 @@ GameBoard.method('next_round', function() {
 	this.populate(this.start_cols, this.start_rows, num_block_types, true);
 	this.find_paths();
 	this.scorebox.begintimer();
+	this.scorebox._timeHelpsLeft = this.scorebox._timeHelpsLeft + 1;
 });
 
 /**
@@ -167,6 +168,35 @@ GameBoard.method('do_win', function() {
 	m.show();
 
 	this.winbox = m;
+});
+
+/**
+ * Display time ran out dialog
+ */ 
+GameBoard.method('lose', function() {
+	if ( this.losebox != null ) {
+		// remove old box first
+		this.losebox.div.remove();
+	}
+
+	var m = new Modal(
+		'Time ran out :(', 
+		'The time ran out! :( Click <strong>NEW GAME</strong> to start over.'
+	);
+
+	var btnNew = m.addbutton("New Game");
+
+	// set binds
+	btnNew.on('click', function() {
+		m.hide();
+		game.start();
+	});
+
+	this.scorebox.stoptimer();
+
+	m.show();
+
+	this.losebox = m;
 });
 
 /**
