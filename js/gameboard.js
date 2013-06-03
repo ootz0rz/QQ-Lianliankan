@@ -36,6 +36,9 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	// is the second, inclusive
 	this.paths = {};
 
+	// counter for how many non blank blocks are left on the board
+	this.num_blocks_left = 0;
+
 	var blockcontainer = $("<div />");
 	blockcontainer.attr('id', 'blockcontainer');
 
@@ -46,7 +49,7 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	this.scorebox = new Scorebox(this.parentnode);
 
 	// populate
-	this.populate(this.start_cols, this.start_rows, num_block_types);
+	this.populate(this.start_cols, this.start_rows, num_block_types, true);
 	this.find_paths();
 }
 
@@ -76,32 +79,39 @@ GameBoard.method('find_paths', function() {
 	console.log(this.paths);
 
 	// see how many paths we have, if we don't have any, we need to repopulate
-	// the board
+	// the board or we've won
 	if ( Object.keys(game.paths).length == 0 ) {
-
+		if ( this.num_blocks_left == 0 ) {
+			console.log("YOU WIN!");
+		} else {
+			// no moves left
+			this.repopulate();
+		}
 	}
 });
-
-
 
 /**
  * Remove the specified block from the gameboard and replace with a blank tile
  */
 GameBoard.method('remove_block', function(block) {
-	// remove from board
-	block.deselect();
-	block.clear();
-
-	// update global arrays
-	var pos = this.blocks_by_type[block];
+	// update board vars
+	var pos = this.blocks_by_type[block.type];
 	for (var index in pos) {
 		var curpos = pos[index];
 
+		//console.log('check', 'type', block.type, 'pos', curpos[0], curpos[1], block.x, block.y);
 		if (curpos[0] == block.x && curpos[1] == block.y) {
-			delete pos[index];
+			//console.log('del', this.blocks_by_type[block.type][index], curpos[0], curpos[1]);
+			delete this.blocks_by_type[block.type][index];
 			break;
 		}
 	}
+
+	this.num_blocks_left = this.num_blocks_left - 1;
+
+	// remove from board
+	block.deselect();
+	block.clear();
 });
 
 /**
@@ -272,7 +282,7 @@ GameBoard.method('select_block', function(x, y) {
 				}
 			}
 		} 
-		
+
 		// otherwise, we just simply select the new block
 		this.selected.deselect();
 		curblock.select();
@@ -284,7 +294,9 @@ GameBoard.method('select_block', function(x, y) {
  * Similar to populate(), but replaces only existing non empty tiles.
  */
 GameBoard.method('repopulate', function() {
-
+	console.log("REPOPULATING BOARD!");
+	this.populate(this.start_cols, this.start_rows, num_block_types, false);
+	this.find_paths();
 });
 
 /**
@@ -293,7 +305,7 @@ GameBoard.method('repopulate', function() {
  * Tries to make sure all the blocks are pairs. Should be fine as long as:
  * 		(start_cols * start_rows) % 2 == 0
  */
-GameBoard.method('populate', function (start_cols, start_rows, num_types) {
+GameBoard.method('populate', function (start_cols, start_rows, num_types, fresh) {
 	var x = 0;
 	var y = 0;
 	var id = 0;
@@ -307,18 +319,23 @@ GameBoard.method('populate', function (start_cols, start_rows, num_types) {
 	// pass 0:
 	// create random distribution of blocks
 	for (x = 0; x < this.cols; x++) {
-		this.blocks[x] = {};
+		if (fresh) this.blocks[x] = {};
 
 		for (y = 0; y < this.rows; y++) {
-			this.blocks[x][y] = null;
+			if (fresh) {
+				this.blocks[x][y] = null;
+			}
+			else if (this.blocks[x][y].type == BLOCK_BLANK_TYPE_ID) {
+				// if this is an empty block type, we skip it
+				continue;
+			}
 
 			var xdelta = x - padding_x;
 			var ydelta = y - padding_y;
 
 			var curblocktype = BLOCK_BLANK_TYPE_ID;
 			if (
-				xdelta >= 0 && xdelta < start_cols
-				&& 
+				xdelta >= 0 && xdelta < start_cols && 
 				ydelta >= 0 && ydelta < start_rows
 			) {
 				curblocktype = Math.floor((Math.random() * num_types)) % num_types;
@@ -329,10 +346,10 @@ GameBoard.method('populate', function (start_cols, start_rows, num_types) {
 		}
 	}
 
-	this.blocks_by_type = GameBoard__fix_block_pairings(this, types_used);
+	this.blocks_by_type = GameBoard__fix_block_pairings(this, types_used, fresh);
 });
 
-var GameBoard__fix_block_pairings = function(board, types_used) {
+var GameBoard__fix_block_pairings = function(board, types_used, fresh) {
 	console.log('types used v1', types_used);
 
 	// pass 1:
@@ -365,7 +382,13 @@ var GameBoard__fix_block_pairings = function(board, types_used) {
 			var x = val[0];
 			var y = val[1];
 
-			board.blocks[x][y] = new Block(board.blockcontainer, board.radius, x, y, key);
+			if (fresh) {
+				board.blocks[x][y] = new Block(board.blockcontainer, board.radius, x, y, key);
+				if ( key != BLOCK_BLANK_TYPE_ID ) board.num_blocks_left = board.num_blocks_left + 1;
+			}
+			else {
+				board.blocks[x][y].changetype(key);
+			}
 		}
 	}
 

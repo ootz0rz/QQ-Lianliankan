@@ -40,6 +40,16 @@ Block.method('clear', function () {
 	this.create();
 });
 
+Block.method('changetype', function (newtype) {
+	this.o.remove();
+	this.div.remove();
+
+	this.type = newtype;
+	this.bID = Block__getID(this.x, this.y, this.type);
+
+	this.create();
+});
+
 Block.method('select', function () {
 	this.div.addClass('selected');
 });
