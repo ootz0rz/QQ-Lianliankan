@@ -123,7 +123,7 @@ BokehBG.method('create_at', function (x, y) {
     b.addClass('bokeh_size_' + snum);
     
     // choose random animation
-    /* too slow :( looks really cool though :o 
+    ///* too slow :( looks really cool though :o 
     if ( Math.random() > .5 ) {
         var anum = Math.round(Math.random() * (this.numanim - 1)) + 1;
         b.addClass('bokeh_anim_' + anum);
