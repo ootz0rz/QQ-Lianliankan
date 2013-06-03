@@ -29,8 +29,8 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	// --------------------------------------
 	var h = new Modal(
 		'OMG HELP MEEEE',
-		"The game is fairly simple. It's basically matching tiles but with a "
-		+ "small twist. There must be a clear, unbroken path between each of "
+		"It's matching tiles but with a "
+		+ "twist! There must be a clear, unbroken path between each of "
 		+ "the tiles. This means they can be beside each other, or a bit "
 		+ "further away too. But the path can only take 2 turns at most. The "
 		+ "following are some examples of valid moves. Note that there is "
