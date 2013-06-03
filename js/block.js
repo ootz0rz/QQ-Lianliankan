@@ -31,23 +31,22 @@ var Block__onDivClick = function(e) {
 
 Block.method('clear', function () {
 	this.o.fadeOut();
-	this.o.remove();
-	this.div.remove();
+
+	this.o.removeClass(block_types[this.type]);
 
 	this.type = BLOCK_BLANK_TYPE_ID;
 	this.bID = Block__getID(this.x, this.y, this.type);
 
-	this.create();
+	this.o.addClass(block_types[this.type]);
 });
 
 Block.method('changetype', function (newtype) {
-	this.o.remove();
-	this.div.remove();
+	this.o.removeClass(block_types[this.type]);
 
 	this.type = newtype;
 	this.bID = Block__getID(this.x, this.y, this.type);
 
-	this.create();
+	this.o.addClass(block_types[this.type]);
 });
 
 Block.method('select', function () {
