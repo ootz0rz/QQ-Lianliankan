@@ -25,6 +25,34 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	// bottom score/control box
 	this.scorebox = new Scorebox(this.parentnode);
 
+	// show welcome message
+	// --------------------------------------
+	var m = new Modal(
+		'Welcome!', 
+		'To begin playing, close this window and click '
+		+ '<strong>NEW GAME</strong> or the <strong>START</strong> button '
+		+ 'below. Instructions are available under '
+		+ '<strong>HELP</strong>. Enjoy!'
+	);
+	var mstart = m.addbutton("Start");
+	var mclose = m.addbutton("Close");
+
+	mclose.on('click', function() {
+		m.div.remove();
+	});
+
+	mstart.on('click', function() {
+		m.div.remove();
+		game.start();
+	});
+
+	m.show();
+}
+
+/**
+ * Display help dialog
+ */ 
+GameBoard.method('help', function() {
 	// create help dialog
 	// --------------------------------------
 	var h = new Modal(
@@ -37,8 +65,11 @@ function GameBoard(parentid, bokeh, rows, cols) {
 		+ "no path length limit. Click the [+] next to the time to add more time, but becareful you might run out of help."
 	);
 	h.container.addClass('help');
-	h.addbutton('Close');
-	this.helpbox = h;
+	var btnClose = h.addbutton('Close');
+
+	btnClose.on('click', function() {
+		h.div.remove();
+	});
 
 	// each move type
 	var contents = h.eContents;
@@ -70,30 +101,7 @@ function GameBoard(parentid, bokeh, rows, cols) {
 			.append($("<span />").html("2 turns, creating a sort of U shape."))
 	);
 
-	// show welcome message
-	// --------------------------------------
-	var m = new Modal(
-		'Welcome!', 
-		'To begin playing, close this window and click '
-		+ '<strong>NEW GAME</strong> or the <strong>START</strong> button '
-		+ 'below. Instructions are available under '
-		+ '<strong>HELP</strong>. Enjoy!'
-	);
-	var mstart = m.addbutton("Start");
-	var mclose = m.addbutton("Close");
-
-	mstart.on('click', function() {
-		game.start();
-	});
-
-	m.show();
-}
-
-/**
- * Display help dialog
- */ 
-GameBoard.method('help', function() {
-	this.helpbox.show();
+	h.show();
 });
 
 /**
@@ -154,12 +162,12 @@ GameBoard.method('do_win', function() {
 
 	// set binds
 	btnNew.on('click', function() {
-		m.hide();
+		m.div.remove();
 		game.start();
 	});
 
 	btnNext.on('click', function() {
-		m.hide();
+		m.div.remove();
 		game.next_round();
 	});
 
@@ -189,6 +197,7 @@ GameBoard.method('lose', function() {
 
 	// set binds
 	btnNew.on('click', function() {
+		m.div.remove();
 		m.hide();
 		game.start();
 	});
