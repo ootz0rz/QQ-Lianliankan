@@ -36,8 +36,39 @@ function GameBoard(parentid, bokeh, rows, cols) {
 		+ "following are some examples of valid moves. Note that there is "
 		+ "no path length limit."
 	);
+	h.container.addClass('help');
 	h.addbutton('Close');
 	this.helpbox = h;
+
+	// each move type
+	var contents = h.eContents;
+	var moves = $("<div />");
+	moves.addClass("moves");
+	contents.append(moves);
+
+	moves.append(
+		$("<div />")
+			.append($("<img />").attr('src', 'img/straight.png'))
+			.append($("<span />").html("No turns, a straight path."))
+	);
+
+	moves.append(
+		$("<div />")
+			.append($("<img />").attr('src', 'img/1turn.png'))
+			.append($("<span />").html("A single turn, in either direction, creating an L shape."))
+	);
+
+	moves.append(
+		$("<div />")
+			.append($("<img />").attr('src', 'img/2turna.png'))
+			.append($("<span />").html("2 turns, creating a sort of S shape."))
+	);
+
+	moves.append(
+		$("<div />")
+			.append($("<img />").attr('src', 'img/2turnb.png'))
+			.append($("<span />").html("2 turns, creating a sort of U shape."))
+	);
 
 	// show welcome message
 	// --------------------------------------
