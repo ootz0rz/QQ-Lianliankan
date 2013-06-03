@@ -34,7 +34,7 @@ function GameBoard(parentid, bokeh, rows, cols) {
 		+ "the tiles. This means they can be beside each other, or a bit "
 		+ "further away too. But the path can only take 2 turns at most. The "
 		+ "following are some examples of valid moves. Note that there is "
-		+ "no path length limit. "
+		+ "no path length limit. Click the [+] next to the time to add more time, but becareful you might run out of help."
 	);
 	h.container.addClass('help');
 	h.addbutton('Close');
