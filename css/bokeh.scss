@@ -29,6 +29,7 @@
 @mixin bokeh_size_circle($size) {
 	-webkit-border-radius: $size / 2;
 	-moz-border-radius: $size / 2;
+	border-radius: $size / 2;
 }
 
 @mixin bokeh_pos($top, $left) {

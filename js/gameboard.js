@@ -104,8 +104,8 @@ GameBoard.method('start', function() {
 	$(".block").remove();
 
 	// should always be an even number
-	this.start_rows = 2;
-	this.start_cols = 2;
+	this.start_rows = 4;
+	this.start_cols = 4;
 
 	// populate
 	this.populate(this.start_cols, this.start_rows, num_block_types, true);

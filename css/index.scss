@@ -305,22 +305,30 @@ $platformheight: $radius * $rows + ($rows * $padding);
 		}
 
 		// define individual block types...
-		.block1 { content: url('../img/icons/digital_camera.png'); }
-		.block2 { content: url('../img/icons/iphone.png'); }
-		.block3 { content: url('../img/icons/rainy.png'); }
-		.block4 { content: url('../img/icons/sunny.png'); }
-		.block5 { content: url('../img/icons/mouse.png'); }
-		.block6 { content: url('../img/icons/alarm.png'); }
-		.block7 { content: url('../img/icons/flag.png'); }
-		.block8 { content: url('../img/icons/phone_ringing.png'); }
-		.block9 { content: url('../img/icons/recycle_bin.png'); }
-		.block10 { content: url('../img/icons/envelope_open.png'); }
-		.block11 { content: url('../img/icons/movie.png'); }
-		.block12 { content: url('../img/icons/phone_book.png'); }
-		.block13 { content: url('../img/icons/news.png'); }
-		.block14 { content: url('../img/icons/database.png'); }
-		.block15 { content: url('../img/icons/eject.png'); }
-		.block16 { content: url('../img/icons/calculator.png'); }
+		.block1 { background-image: url('../img/icons/digital_camera.png'); }
+		.block2 { background-image: url('../img/icons/iphone.png'); }
+		.block3 { background-image: url('../img/icons/rainy.png'); }
+		.block4 { background-image: url('../img/icons/sunny.png'); }
+		.block5 { background-image: url('../img/icons/mouse.png'); }
+		.block6 { background-image: url('../img/icons/alarm.png'); }
+		.block7 { background-image: url('../img/icons/flag.png'); }
+		.block8 { background-image: url('../img/icons/phone_ringing.png'); }
+		.block9 { background-image: url('../img/icons/recycle_bin.png'); }
+		.block10 { background-image: url('../img/icons/envelope_open.png'); }
+		.block11 { background-image: url('../img/icons/movie.png'); }
+		.block12 { background-image: url('../img/icons/phone_book.png'); }
+		.block13 { background-image: url('../img/icons/news.png'); }
+		.block14 { background-image: url('../img/icons/database.png'); }
+		.block15 { background-image: url('../img/icons/eject.png'); }
+		.block16 { background-image: url('../img/icons/calculator.png'); }
+
+		@for $x from 1 through (16) {
+			.block#{$x}{
+				//z-index: 210;
+				width: $radius;
+				height: $radius;
+			}
+		}
 
 		// define the row and column positions
 		// columns
