@@ -25,7 +25,17 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	// bottom score/control box
 	this.scorebox = new Scorebox(this.parentnode);
 
-	this.start();
+	//this.start();
+	var m = new Modal(
+		'Welcome!', 
+		'To begin playing, close this window and click '
+		+ '<strong>NEW GAME</strong>. Instructions are available under '
+		+ '<strong>HELP</strong>. Enjoy!'
+	);
+
+	var mclose = m.addbutton("Close");
+
+	m.show();
 }
 
 GameBoard.method('start', function() {
