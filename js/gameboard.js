@@ -10,34 +10,8 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	this.rows = rows;
 	this.cols = cols;
 
-	// this too, should always be an even number
-	this.start_rows = 6;
-	this.start_cols = 6;
-
 	// default sphere/box size
 	this.radius = '40px';
-
-	// currently selected block as Block() if any
-	this.selected = null;
-
-	// array in format
-	// arr[xpos][ypos] -> Block()
-	this.blocks = {};
-
-	// Block().type -> [[x,y], [x,y], ...]
-	this.blocks_by_type = {};
-
-	// All the paths between any valid pair
-	// arr[Block().bID][Block().bID] -> [Block(), Block(), ..., Block()]
-	// Note that the starting element is of the first block and ending element 
-	// is the second, inclusive
-	this.paths = {};
-
-	// counter for how many non blank blocks are left on the board
-	this.num_blocks_left = 0;
-
-	// modal box to display when you win a round
-	this.winbox = null;
 
 	// init the board
 	// --------------------------------------
@@ -51,11 +25,71 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	// bottom score/control box
 	this.scorebox = new Scorebox(this.parentnode);
 
-	// populate
-	//this.populate(this.start_cols, this.start_rows, num_block_types, true);
-	this.populate(2, 2, 2, true);
-	this.find_paths();
+	this.start();
 }
+
+GameBoard.method('start', function() {
+	this.reset();
+	$(".block").remove();
+
+	// should always be an even number
+	this.start_rows = 2;
+	this.start_cols = 2;
+
+	// populate
+	this.populate(this.start_cols, this.start_rows, num_block_types, true);
+	this.find_paths();
+});
+
+GameBoard.method('next_round', function() {
+	this.reset(false);
+	$(".block").remove();
+
+	if ( this.start_rows > this.start_cols ) {
+		this.start_cols = Math.min(this.start_cols + 2, this.cols);
+	} else {
+		this.start_rows = Math.min(this.start_rows + 2, this.rows);
+	}
+
+	// populate
+	this.populate(this.start_cols, this.start_rows, num_block_types, true);
+	this.find_paths();
+});
+
+/**
+ * Display round win dialog
+ */ 
+GameBoard.method('do_win', function() {
+	if ( this.winbox != null ) {
+		// remove old box first
+		this.winbox.div.remove();
+	}
+
+	var m = new Modal(
+		'You Finished!', 
+		'Congrats, you finished this round with <strong>' + this.scorebox.getscore() + 'pts!</strong>'
+		+ '<br /><br />'
+		+ 'To continue to the next round click <strong>NEXT</strong> or <strong>NEW GAME</strong> to start over.'
+	);
+
+	var btnNext = m.addbutton("Next");
+	var btnNew = m.addbutton("New Game");
+
+	// set binds
+	btnNew.on('click', function() {
+		m.hide();
+		game.start();
+	});
+
+	btnNext.on('click', function() {
+		m.hide();
+		game.next_round();
+	});
+
+	m.show();
+
+	this.winbox = m;
+});
 
 /**
  * Find all valid paths between any two blocks of the same type across entire 
@@ -86,22 +120,7 @@ GameBoard.method('find_paths', function() {
 	// the board or we've won
 	if ( Object.keys(game.paths).length == 0 ) {
 		if ( this.num_blocks_left == 0 ) {
-			if ( this.winbox != null ) {
-				// remove old box first
-				this.winbox.div.remove();
-			}
-
-			var m = new Modal(
-				'You Finished!', 
-				'Congrats, you finished this round with <strong>' + this.scorebox.getscore() + 'pts!</strong>'
-				+ '<br /><br />'
-				+ 'To continue to the next round click <strong>NEXT</strong> or <strong>NEW GAME</strong> to start over.'
-			);
-
-			var btnNext = m.addbutton("Next");
-			var btnNew = m.addbutton("New Game");
-
-			m.show();
+			this.do_win();
 		} else {
 			// no moves left
 			this.repopulate();
@@ -423,6 +442,30 @@ var GameBoard__fix_block_pairings = function(board, types_used, fresh) {
 	return types_used;
 };
 
-GameBoard.method('reset', function () {
+GameBoard.method('reset', function (scorereset) {
+	if ( scorereset == null ) scorereset = true;
 
+	// currently selected block as Block() if any
+	this.selected = null;
+
+	// array in format
+	// arr[xpos][ypos] -> Block()
+	this.blocks = {};
+
+	// Block().type -> [[x,y], [x,y], ...]
+	this.blocks_by_type = {};
+
+	// All the paths between any valid pair
+	// arr[Block().bID][Block().bID] -> [Block(), Block(), ..., Block()]
+	// Note that the starting element is of the first block and ending element 
+	// is the second, inclusive
+	this.paths = {};
+
+	// counter for how many non blank blocks are left on the board
+	this.num_blocks_left = 0;
+
+	// modal box to display when you win a round
+	this.winbox = null;
+
+	if ( scorereset ) this.scorebox.reset();
 });

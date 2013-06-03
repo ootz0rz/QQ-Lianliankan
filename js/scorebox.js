@@ -9,7 +9,7 @@ if (!Date.now) {
 function Scorebox(parentnode) {
 	this.parentnode = parentnode;
 
-	this._actualScore = 123;
+	this._actualScore = 0;
 
 	// create scorebox and its components
 	var node = $("<div />");
@@ -30,6 +30,7 @@ function Scorebox(parentnode) {
 	newGame.attr('href', '#');
 	newGame.attr('id', 'btnNewGame');
 	newGame.html("New Game");
+	newGame.on('click', function() {game.start();});
 
 	controls.append(newGame);
 	this.btnNewGame = newGame;
@@ -76,9 +77,18 @@ function Scorebox(parentnode) {
  */
 Scorebox.method('add', function() {
 	this._actualScore = this._actualScore + 20;
-	this.curScore.html(this._actualScore);
+	this.update();
 });
 
 Scorebox.method('getscore', function() {
 	return this._actualScore;
+});
+
+Scorebox.method('reset', function() {
+	this._actualScore = 0;
+	this.update();
+});
+
+Scorebox.method('update', function() {
+	this.curScore.html(this._actualScore);
 });
