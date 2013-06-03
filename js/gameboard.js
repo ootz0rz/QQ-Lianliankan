@@ -138,7 +138,7 @@ GameBoard.method('next_round', function() {
 	this.populate(this.start_cols, this.start_rows, num_block_types, true);
 	this.find_paths();
 	this.scorebox.begintimer();
-	this.scorebox.extendtime(this.start_rows < this.rows ? this.start_rows * 2 : 0);
+	this.scorebox.extendtime(this.start_cols < this.cols ? this.start_rows * 2 : 0);
 	this.scorebox._timeHelpsLeft = this.scorebox._timeHelpsLeft + 1;
 });
 
@@ -184,6 +184,8 @@ GameBoard.method('do_win', function() {
  * Display time ran out dialog
  */ 
 GameBoard.method('lose', function() {
+	this.scorebox.stoptimer();
+	
 	if ( this.losebox != null ) {
 		// remove old box first
 		this.losebox.div.remove();
@@ -202,8 +204,6 @@ GameBoard.method('lose', function() {
 		m.hide();
 		game.start();
 	});
-
-	this.scorebox.stoptimer();
 
 	m.show();
 

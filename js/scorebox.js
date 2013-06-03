@@ -7,6 +7,8 @@ if (!Date.now) {
 
 /* scorebox object */
 function Scorebox(parentnode, max_time, helps, extend_by) {
+	var $this = this;
+
 	this.parentnode = parentnode;
 
 	this._defaultMaxTime = max_time == null ? 90 : max_time;
@@ -41,6 +43,8 @@ function Scorebox(parentnode, max_time, helps, extend_by) {
 	newGame.attr('id', 'btnNewGame');
 	newGame.html("New Game");
 	newGame.on('click', function() {
+		$this.reset();
+		game.reset();
 		game.start();
 	});
 
@@ -68,7 +72,6 @@ function Scorebox(parentnode, max_time, helps, extend_by) {
 	this.timer = timer;
 	this.sb_extend = $('<a href="#" id="sb_extend"> [+]</a>');
 	$("h1", this.timer).append(this.sb_extend);
-	var $this = this;
 	this.sb_extend.on('click', function() {
 		$this.addtotimer();
 	})
@@ -111,6 +114,7 @@ Scorebox.method('reset', function(maxtime) {
 	this._maxTime = maxtime == null ? this._defaultMaxTime : maxtime; // in seconds
 	this._timeHelpsLeft = this._defaultHelpsLeft; // how many times you can extend the time
 	this._extendTimeBy = this._defaultExtendTimeBy; // in seconds
+	this._currentTime = this._maxTime;
 
     this.txtTimer = {};
     this.txtTimer['start'] = Date.now();
@@ -136,6 +140,10 @@ var padZeroes = function(n) {
 } 
 
 var scorebox_getTimerString = function(start, now, curtime, max, scorebox) {
+	if ( !scorebox.txtTimer['dotimer'] ) {
+		return;
+	}
+
     if ( now == null ) {
         now = Date.now();
     }
