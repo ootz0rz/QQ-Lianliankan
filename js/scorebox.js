@@ -6,10 +6,20 @@ if (!Date.now) {
 }
 
 /* scorebox object */
-function Scorebox(parentnode) {
+function Scorebox(parentnode, max_time, helps, extend_by) {
 	this.parentnode = parentnode;
 
+	this._defaultMaxTime = max_time == null ? 360 : max_time;
+	this._defaultHelpsLeft = helps == null ? 2 : helps;
+	this._defaultExtendTimeBy = extend_by == null ? 60 : extend_by;
+
 	this._actualScore = 0;
+	this._maxTime = this._defaultMaxTime; // in seconds
+	this._timeHelpsLeft = this._defaultHelpsLeft; // how many times you can extend the time
+	this._extendTimeBy = this._defaultExtendTimeBy; // in seconds
+	this._currentTime = this._maxTime;
+
+	this.txtTimer = {};
 
 	// create scorebox and its components
 	var node = $("<div />");
@@ -81,9 +91,9 @@ function Scorebox(parentnode) {
 /**
  * Add appropriate # of points for completing 1 pairing, and update display
  */
-Scorebox.method('add', function() {
+Scorebox.method('addScore', function() {
 	this._actualScore = this._actualScore + 20;
-	this.update();
+	this.updateScore();
 });
 
 Scorebox.method('getscore', function() {
@@ -92,9 +102,73 @@ Scorebox.method('getscore', function() {
 
 Scorebox.method('reset', function() {
 	this._actualScore = 0;
-	this.update();
+	this._maxTime = this._defaultMaxTime; // in seconds
+	this._timeHelpsLeft = this._defaultHelpsLeft; // how many times you can extend the time
+	this._extendTimeBy = this._defaultExtendTimeBy; // in seconds
+
+    this.txtTimer = {};
+    this.txtTimer['start'] = Date.now();
+    this.txtTimer['dotimer'] = true;
+
+	this.updateScore();
 });
 
-Scorebox.method('update', function() {
+Scorebox.method('updateScore', function() {
 	this.curScore.html(this._actualScore);
+});
+
+/**
+ * Stop the timer.
+ **/
+Scorebox.method('stoptimer', function() {
+    this.txtTimer['dotimer'] = false;
+    clearTimeout(this.txtTimer['timeout']);
+});
+
+var padZeroes = function(n) {
+    return n < 10 ? '0' + n : n
+} 
+
+var scorebox_getTimerString = function(start, now, curtime) {
+    if ( now == null ) {
+        now = Date.now();
+    }
+    
+    var elapsed = (curtime * 1000) - (now - start);
+    //console.log('elapsed', elapsed, 'curtime', curtime, 'now', now, 'start', start);
+    if ( start < now ) {
+        var eDate = new Date(elapsed);
+        var hrs = eDate.getUTCHours();
+        return (hrs > 0 ? padZeroes(hrs) + ":" : "") + 
+            padZeroes(eDate.getUTCMinutes()) + ":" + 
+            padZeroes(eDate.getUTCSeconds());
+    }
+    
+    return "0:00";
+};
+
+/**
+ * Update the timer.
+ **/
+var scorebox_updateTimer = function(scorebox) {
+    //console.log('scorebox', scorebox);
+    
+    var start = scorebox.txtTimer['start'];
+    var now = Date.now();
+    
+    scorebox.curTime.html(scorebox_getTimerString(start, now, scorebox._currentTime));
+}
+
+/**
+ * Start the timer.
+ **/
+Scorebox.method('begintimer', function() {
+    var $this = this;
+
+    this.txtTimer = {};
+    this.txtTimer['start'] = Date.now();
+    this.txtTimer['dotimer'] = true;
+    
+    // update timer
+    this.txtTimer['timeout'] = window.setInterval(function() {scorebox_updateTimer($this);}, 200);
 });

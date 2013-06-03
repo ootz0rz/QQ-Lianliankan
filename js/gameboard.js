@@ -110,6 +110,7 @@ GameBoard.method('start', function() {
 	// populate
 	this.populate(this.start_cols, this.start_rows, num_block_types, true);
 	this.find_paths();
+	this.scorebox.begintimer();
 });
 
 /**
@@ -128,6 +129,7 @@ GameBoard.method('next_round', function() {
 	// populate
 	this.populate(this.start_cols, this.start_rows, num_block_types, true);
 	this.find_paths();
+	this.scorebox.begintimer();
 });
 
 /**
@@ -159,6 +161,8 @@ GameBoard.method('do_win', function() {
 		m.hide();
 		game.next_round();
 	});
+
+	this.scorebox.stoptimer();
 
 	m.show();
 
@@ -394,7 +398,7 @@ GameBoard.method('select_block', function(x, y) {
 					this.remove_block(curblock);
 					this.selected = null;
 
-					this.scorebox.add();
+					this.scorebox.addScore();
 
 					this.find_paths();
 					return;
