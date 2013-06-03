@@ -25,6 +25,9 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	// bottom score/control box
 	this.scorebox = new Scorebox(this.parentnode);
 
+	// how many points to remove when a hint is used
+	this.score_remove_on_hint = -15;
+
 	// show welcome message
 	// --------------------------------------
 	var m = new Modal(
@@ -59,10 +62,7 @@ GameBoard.method('help', function() {
 		'OMG HELP MEEEE',
 		"It's matching tiles but with a twist! Complete the board before the "
 		+ "time runs out! Also, there must be a clear, unbroken path between each of "
-		+ "the tiles. This means they can be beside each other, or a bit "
-		+ "further away too. But the path can only take 2 turns at most. The "
-		+ "following are some examples of valid moves. Note that there is "
-		+ "no path length limit. Click the [+] next to the time to add more time, but becareful you might run out of help."
+		+ "the tiles as shown below.<br /><br />Note: Click the [+] next to the time to add more time, or the [?] for a hint near your score. The [+] is limited in use, and the [?] will remove points!"
 	);
 	h.container.addClass('help');
 	var btnClose = h.addbutton('Close');
@@ -102,6 +102,21 @@ GameBoard.method('help', function() {
 	);
 
 	h.show();
+});
+
+/**
+ * Temporarily highlight a block that has a valid move remaining
+ */
+GameBoard.method('give_hint', function() {
+	// just find the first valid block with a path and highlight it
+	for (var k1 in this.paths) {
+		for (var k2 in this.paths[k1]) {
+			this.paths[k1][k2][0].hint();
+			game.scorebox.add_to_score(this.score_remove_on_hint);
+
+			return;
+		}
+	}
 });
 
 /**

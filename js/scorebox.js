@@ -71,6 +71,7 @@ function Scorebox(parentnode, max_time, helps, extend_by) {
 	this.node.append(timer);
 	this.timer = timer;
 	this.sb_extend = $('<a href="#" id="sb_extend"> [+]</a>');
+
 	$("h1", this.timer).append(this.sb_extend);
 	this.sb_extend.on('click', function() {
 		$this.addtotimer();
@@ -90,6 +91,13 @@ function Scorebox(parentnode, max_time, helps, extend_by) {
 	this.node.append(score);
 	this.score = score;
 
+	this.sb_hint = $('<a href="#" id="sb_help"> [?]</a>');
+
+	$("h1", this.score).append(this.sb_hint);
+	this.sb_hint.on('click', function() {
+		game.give_hint();
+	})
+
 	var curScore = $("<div id='score' />");
 	curScore.html(this._actualScore);
 
@@ -102,6 +110,14 @@ function Scorebox(parentnode, max_time, helps, extend_by) {
  */
 Scorebox.method('addScore', function() {
 	this._actualScore = this._actualScore + 20;
+	this.updateScore();
+});
+
+/**
+ * Add given number to the score
+ */
+Scorebox.method('add_to_score', function(val) {
+	this._actualScore = this._actualScore + val;
 	this.updateScore();
 });
 

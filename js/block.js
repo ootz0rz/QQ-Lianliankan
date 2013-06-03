@@ -13,6 +13,8 @@ function Block(parentnode, radius, x, y, type) {
 	this.o = null;
 
 	this.create();
+
+	this.is_selected = false;
 }
 
 var Block__getID = function(x, y, type) {
@@ -50,10 +52,12 @@ Block.method('changetype', function (newtype) {
 });
 
 Block.method('select', function () {
+	this.is_selected = true;
 	this.div.addClass('selected');
 });
 
 Block.method('deselect', function () {
+	this.is_selected = false;
 	this.div.removeClass('selected');
 });
 
@@ -68,6 +72,21 @@ Block.method('highlight', function () {
 	this.timer = window.setTimeout(function() {
 		Block__highlight__removeClass($this);
 	}, 200);
+});
+
+Block.method('hint', function () {
+	this.div.addClass('hint');
+	if ( this.is_selected ) this.div.removeClass('selected');
+
+	var Block__hint__removeClass = function(block) {
+		block.div.removeClass('hint');
+		if ( block.is_selected ) block.div.addClass('selected');
+	}
+
+	var $this = this;
+	this.timer = window.setTimeout(function() {
+		Block__hint__removeClass($this);
+	}, 600);
 });
 
 /**

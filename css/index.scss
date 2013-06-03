@@ -225,6 +225,11 @@ a {
 		font-family: $font_luckiest;
 		@include neontext($color_game_border); 
 	}
+
+	a, a:hover {
+		text-decoration: none;
+		color: #fff;
+	}
 }
 
 #credits {
@@ -260,6 +265,11 @@ $platformheight: $radius * $rows + ($rows * $padding);
 	top: 10px;
 
 	#blockcontainer {
+		.hint {
+			@include btnGradientImportant(darken($s4, 15));
+			@include transition(all 0.6s linear);
+		}
+
 		.pathway {
 			@include btnGradientImportant(darken($s2, 15));
 			@include transition(all 0.2s linear);
@@ -369,8 +379,11 @@ $platformheight: $radius * $rows + ($rows * $padding);
 
 		background-color: transparent;
 
+		z-index: 180;
+
 		#timercontainer, #scorecontainer {
 			h1 {
+				z-index: 190;
 				display: block;
 				margin: 0;
 				padding: 0;
