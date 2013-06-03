@@ -55,7 +55,7 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	moves.append(
 		$("<div />")
 			.append($("<img />").attr('src', 'img/1turn.png'))
-			.append($("<span />").html("A single turn, in either direction, creating an L shape."))
+			.append($("<span />").html("A single turn, creating an L shape."))
 	);
 
 	moves.append(

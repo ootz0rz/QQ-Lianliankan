@@ -522,10 +522,14 @@ $platformheight: $radius * $rows + ($rows * $padding);
 				div {
 					display: block;
 					margin-top: 1em;
+
+					vertical-align: middle
 				}
 
 				img {
 					margin-right: 2em;
+
+					vertical-align: middle
 				}
 			}
 
