@@ -451,3 +451,5 @@ $platformheight: $radius * $rows + ($rows * $padding);
 }
 
 @import "bokeh";
+
+@import "modal";

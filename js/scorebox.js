@@ -9,6 +9,8 @@ if (!Date.now) {
 function Scorebox(parentnode) {
 	this.parentnode = parentnode;
 
+	this._actualScore = 123;
+
 	// create scorebox and its components
 	var node = $("<div />");
 	node.attr('id', 'scorebox');
@@ -63,8 +65,12 @@ function Scorebox(parentnode) {
 	this.score = score;
 
 	var curScore = $("<div id='score' />");
-	curScore.html('0');
+	curScore.html(this._actualScore);
 
 	this.score.append(curScore);
 	this.curScore = curScore;
 }
+
+Scorebox.method('getscore', function() {
+	return this._actualScore;
+});

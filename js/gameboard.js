@@ -20,9 +20,6 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	// currently selected block as Block() if any
 	this.selected = null;
 
-	// init the board
-	// --------------------------------------
-
 	// array in format
 	// arr[xpos][ypos] -> Block()
 	this.blocks = {};
@@ -39,6 +36,12 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	// counter for how many non blank blocks are left on the board
 	this.num_blocks_left = 0;
 
+	// modal box to display when you win a round
+	this.winbox = null;
+
+	// init the board
+	// --------------------------------------
+
 	var blockcontainer = $("<div />");
 	blockcontainer.attr('id', 'blockcontainer');
 
@@ -49,7 +52,8 @@ function GameBoard(parentid, bokeh, rows, cols) {
 	this.scorebox = new Scorebox(this.parentnode);
 
 	// populate
-	this.populate(this.start_cols, this.start_rows, num_block_types, true);
+	//this.populate(this.start_cols, this.start_rows, num_block_types, true);
+	this.populate(2, 2, 2, true);
 	this.find_paths();
 }
 
@@ -82,7 +86,22 @@ GameBoard.method('find_paths', function() {
 	// the board or we've won
 	if ( Object.keys(game.paths).length == 0 ) {
 		if ( this.num_blocks_left == 0 ) {
-			console.log("YOU WIN!");
+			if ( this.winbox != null ) {
+				// remove old box first
+				this.winbox.div.remove();
+			}
+
+			var m = new Modal(
+				'You Finished!', 
+				'Congrats, you finished this round with <strong>' + this.scorebox.getscore() + 'pts!</strong>'
+				+ '<br /><br />'
+				+ 'To continue to the next round click <strong>NEXT</strong> or <strong>NEW GAME</strong> to start over.'
+			);
+
+			var btnNext = m.addbutton("Next");
+			var btnNew = m.addbutton("New Game");
+
+			m.show();
 		} else {
 			// no moves left
 			this.repopulate();
