@@ -128,7 +128,6 @@ Scorebox.method('updateScore', function() {
  **/
 Scorebox.method('stoptimer', function() {
     this.txtTimer['dotimer'] = false;
-    //clearTimeout(this.txtTimer['timeout']);
     clearInterval(this.txtTimer['timeout']);
 });
 
@@ -144,7 +143,7 @@ var scorebox_getTimerString = function(start, now, curtime, max, scorebox) {
     scorebox.sb_extend.html("&nbsp;[" + (scorebox._timeHelpsLeft > 0 ? "+" + scorebox._timeHelpsLeft : "---") + "]");
     
     var elapsed = (curtime * 1000) - (now - start);
-    //console.log('elapsed', elapsed, 'max', (max * 1000));
+    
     if ( elapsed > 0 ) {
         var eDate = new Date(elapsed);
         var hrs = eDate.getUTCHours();
@@ -164,8 +163,6 @@ var scorebox_getTimerString = function(start, now, curtime, max, scorebox) {
  * Update the timer.
  **/
 var scorebox_updateTimer = function(scorebox) {
-    //console.log('scorebox', scorebox);
-    
     var start = scorebox.txtTimer['start'];
     var now = Date.now();
     

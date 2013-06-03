@@ -164,6 +164,7 @@ GameBoard.method('do_win', function() {
 	});
 
 	this.scorebox.stoptimer();
+	this.scorebox.stoptimer();
 
 	m.show();
 
@@ -197,6 +198,9 @@ GameBoard.method('lose', function() {
 	m.show();
 
 	this.losebox = m;
+
+	// TODO fix the bug where if you force close the modal window (remove hash
+	// from the URL) you can continue playing the game as normal :/
 });
 
 /**
@@ -206,6 +210,7 @@ GameBoard.method('lose', function() {
 GameBoard.method('find_paths', function() {
 	this.paths = {};
 
+	// check the paths for every block still on the board
 	for (var typeid in this.blocks_by_type) {
 		var blocks = this.blocks_by_type[typeid];
 
@@ -221,8 +226,6 @@ GameBoard.method('find_paths', function() {
 			}
 		}
 	}
-
-	console.log(this.paths);
 
 	// see how many paths we have, if we don't have any, we need to repopulate
 	// the board or we've won
@@ -245,9 +248,7 @@ GameBoard.method('remove_block', function(block) {
 	for (var index in pos) {
 		var curpos = pos[index];
 
-		//console.log('check', 'type', block.type, 'pos', curpos[0], curpos[1], block.x, block.y);
 		if (curpos[0] == block.x && curpos[1] == block.y) {
-			//console.log('del', this.blocks_by_type[block.type][index], curpos[0], curpos[1]);
 			delete this.blocks_by_type[block.type][index];
 			break;
 		}
@@ -267,7 +268,6 @@ GameBoard.method('remove_block', function(block) {
  * since we've got a pretty small board
  */
 var Gameboard__find_path = function(board, block) {
-
 	// movement directions [x, y]
 	// assumes grid starts top left, x expands to right and y expands to bottom
 	var _up = [0, -1];
@@ -380,9 +380,7 @@ var Gameboard__find_path = function(board, block) {
 	}
 
 	var paths = do_pathfinding(block, M_NONE, 2, all_nodes, [block]);
-	//console.log('do_pathfinding', paths);
 
-	//console.log("FINAL PATHS", valid_path);
 	return valid_path;
 };
 
@@ -444,10 +442,10 @@ GameBoard.method('select_block', function(x, y) {
 });
 
 /**
- * Similar to populate(), but replaces only existing non empty tiles.
+ * Similar to populate(), but replaces only existing non empty tiles. Will also
+ * re-evaluate paths.
  */
 GameBoard.method('repopulate', function() {
-	console.log("REPOPULATING BOARD!");
 	this.populate(this.start_cols, this.start_rows, num_block_types, false);
 	this.find_paths();
 });
@@ -503,8 +501,6 @@ GameBoard.method('populate', function (start_cols, start_rows, num_types, fresh)
 });
 
 var GameBoard__fix_block_pairings = function(board, types_used, fresh) {
-	console.log('types used v1', types_used);
-
 	// pass 1:
 	// compile list of odd numbered length keys
 	var odds = [];
@@ -514,8 +510,6 @@ var GameBoard__fix_block_pairings = function(board, types_used, fresh) {
 		}
 	}
 
-	console.log('odds', odds);
-
 	// add one from the odds to another odd, remove both from list
 	while (odds.length > 0) {
 		var oddid_1 = odds.pop();
@@ -524,8 +518,6 @@ var GameBoard__fix_block_pairings = function(board, types_used, fresh) {
 		var loc1 = types_used[oddid_1].pop();
 		types_used[oddid_2].push(loc1);
 	}
-
-	console.log('odds', odds);
 
 	// pass 2:
 	// finally create/display blocks
@@ -544,8 +536,6 @@ var GameBoard__fix_block_pairings = function(board, types_used, fresh) {
 			}
 		}
 	}
-
-	console.log('types used v2', types_used);
 
 	return types_used;
 };
