@@ -128,7 +128,8 @@ Scorebox.method('updateScore', function() {
  **/
 Scorebox.method('stoptimer', function() {
     this.txtTimer['dotimer'] = false;
-    clearTimeout(this.txtTimer['timeout']);
+    //clearTimeout(this.txtTimer['timeout']);
+    clearInterval(this.txtTimer['timeout']);
 });
 
 var padZeroes = function(n) {
