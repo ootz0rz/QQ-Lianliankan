@@ -138,6 +138,7 @@ GameBoard.method('next_round', function() {
 	this.populate(this.start_cols, this.start_rows, num_block_types, true);
 	this.find_paths();
 	this.scorebox.begintimer();
+	this.scorebox.extendtime(this.start_rows < this.rows ? this.start_rows * 2 : 0);
 	this.scorebox._timeHelpsLeft = this.scorebox._timeHelpsLeft + 1;
 });
 

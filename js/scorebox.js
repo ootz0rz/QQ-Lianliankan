@@ -106,9 +106,9 @@ Scorebox.method('getscore', function() {
 	return this._actualScore;
 });
 
-Scorebox.method('reset', function() {
+Scorebox.method('reset', function(maxtime) {
 	this._actualScore = 0;
-	this._maxTime = this._defaultMaxTime; // in seconds
+	this._maxTime = maxtime == null ? this._defaultMaxTime : maxtime; // in seconds
 	this._timeHelpsLeft = this._defaultHelpsLeft; // how many times you can extend the time
 	this._extendTimeBy = this._defaultExtendTimeBy; // in seconds
 
@@ -188,7 +188,14 @@ Scorebox.method('begintimer', function() {
  */
 Scorebox.method('addtotimer', function() {
 	if ( this._timeHelpsLeft > 0 ) {
-		this._currentTime = this._currentTime + this._extendTimeBy;
+		this.extendtime(this._extendTimeBy);
 		this._timeHelpsLeft = this._timeHelpsLeft - 1;
 	}
+});
+
+/**
+ * Extend time by given amount
+ */
+Scorebox.method('extendtime', function(amt) {
+	this._currentTime = this._currentTime + amt;
 });
