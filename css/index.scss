@@ -98,6 +98,8 @@
 	background-image: -moz-linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%);
 	background-image: -webkit-linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%);
 	background-image: linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%);
+	background-image: -ms-linear-gradient(top, $tbot_color1 0%, $tbot_color2 50%, $tbot_color3 50%, $tbot_color4 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$tbot_color1', endColorstr='$tbot_color4',GradientType=0 );
 }
 
 @mixin btnGradientImportant($color) {
