@@ -301,6 +301,8 @@ GameBoard.method('select_block', function(x, y) {
 					this.remove_block(curblock);
 					this.selected = null;
 
+					this.scorebox.add();
+
 					this.find_paths();
 					return;
 				}

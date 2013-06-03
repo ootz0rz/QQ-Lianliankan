@@ -71,6 +71,14 @@ function Scorebox(parentnode) {
 	this.curScore = curScore;
 }
 
+/**
+ * Add appropriate # of points for completing 1 pairing, and update display
+ */
+Scorebox.method('add', function() {
+	this._actualScore = this._actualScore + 20;
+	this.curScore.html(this._actualScore);
+});
+
 Scorebox.method('getscore', function() {
 	return this._actualScore;
 });
